@@ -27,6 +27,9 @@ class BudgetManager(context: Context) {
         private const val KEY_PIN_HASH = "pin_hash"
         private const val KEY_PIN_SALT = "pin_salt"
         private const val KEY_EMERGENCY_DATE = "emergency_date"
+        private const val KEY_SMS_AUTO = "sms_auto"
+        private const val KEY_SMS_LAST_KEY = "sms_last_key"
+        private const val KEY_LAST_AUTO = "last_auto"
         const val DEFAULT_PAYDAY = 27
 
         /** في القفل الصارم: الإعدادات وشاشات إلغاء التثبيت تنقفل بعد. */
@@ -109,6 +112,24 @@ class BudgetManager(context: Context) {
     private fun hash(salt: String, pin: String): String =
         MessageDigest.getInstance("SHA-256").digest((salt + pin).toByteArray())
             .joinToString("") { "%02x".format(it) }
+
+    // ---------- رسائل البنك ----------
+
+    fun isSmsAuto(): Boolean = prefs.getBoolean(KEY_SMS_AUTO, false)
+
+    fun setSmsAuto(on: Boolean) = prefs.edit().putBoolean(KEY_SMS_AUTO, on).apply()
+
+    /** يرجع false إذا الرسالة نفسها انحسبت قبل (عشان ما تنحسب مرتين). */
+    fun markSmsProcessed(key: String): Boolean {
+        val h = key.hashCode().toString()
+        if (prefs.getString(KEY_SMS_LAST_KEY, null) == h) return false
+        prefs.edit().putString(KEY_SMS_LAST_KEY, h).apply()
+        return true
+    }
+
+    fun getLastAuto(): String? = prefs.getString(KEY_LAST_AUTO, null)
+
+    fun setLastAuto(text: String) = prefs.edit().putString(KEY_LAST_AUTO, text).apply()
 
     fun hasPlan(): Boolean = prefs.getBoolean(KEY_HAS_PLAN, false)
 

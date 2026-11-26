@@ -7,6 +7,9 @@
             <category android:name="android.intent.category.LAUNCHER"/>
         </intent>
     </queries>
+    <!-- قراءة رسائل البنك عشان يسجل المصاريف تلقائياً -->
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+
     <application
         android:allowBackup="true"
         android:supportsRtl="true"
@@ -27,6 +30,14 @@
             android:launchMode="singleTask"
             android:taskAffinity="com.hosam.budgetlock.lock"
             android:theme="@style/Theme.BudgetLock.Lock"/>
+        <receiver
+            android:name=".BankSmsReceiver"
+            android:exported="true"
+            android:permission="android.permission.BROADCAST_SMS">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+            </intent-filter>
+        </receiver>
         <service
             android:name=".LockAccessibilityService"
             android:exported="true"

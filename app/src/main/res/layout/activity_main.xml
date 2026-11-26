@@ -210,6 +210,22 @@
                     android:id="@+id/btnAddExpense"
                     style="@style/BigButton"
                     android:text="سجّل المصروف" />
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/swSms"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="سجّل تلقائياً من رسائل البنك"
+                    android:textColor="@color/text_primary"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/tvLastAuto"
+                    style="@style/CardHint"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="0dp"
+                    android:text="كل رسالة شراء أو سحب أو حوالة صادرة تنحسب لحالها." />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 

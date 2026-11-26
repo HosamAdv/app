@@ -1,5 +1,6 @@
 package com.hosam.budgetlock
 
+import android.Manifest
 import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -10,6 +11,7 @@ import android.text.TextUtils
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.Chip
@@ -27,6 +29,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var etBalance: TextInputEditText
     private lateinit var etPayday: TextInputEditText
     private lateinit var swStrict: MaterialSwitch
+    private lateinit var swSms: MaterialSwitch
+
+    companion object {
+        private const val REQ_SMS = 42
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +44,23 @@ class MainActivity : AppCompatActivity() {
         etBalance = findViewById(R.id.etBalance)
         etPayday = findViewById(R.id.etPayday)
         swStrict = findViewById(R.id.swStrict)
+        swSms = findViewById(R.id.swSms)
+
+        swSms.setOnCheckedChangeListener { button, checked ->
+            if (!button.isPressed) return@setOnCheckedChangeListener
+            if (checked) {
+                if (hasSmsPermission()) {
+                    manager.setSmsAuto(true); updateUI()
+                } else {
+                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECEIVE_SMS), REQ_SMS)
+                }
+            } else {
+                updateUI() // يرجع مفعّل لين يتأكد الرمز
+                PinDialog.require(this, manager, "إيقاف التسجيل من الرسائل") {
+                    manager.setSmsAuto(false); updateUI()
+                }
+            }
+        }
 
         etPayday.setText(manager.getPayday().toString())
 
@@ -80,6 +104,22 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode != REQ_SMS) return
+        if (hasSmsPermission()) {
+            manager.setSmsAuto(true)
+            toast("تمام، أي رسالة صرف من البنك تنحسب تلقائياً")
+        } else {
+            toast("بدون صلاحية الرسائل ما أقدر أقرأها")
+        }
+        updateUI()
+    }
+
+    private fun hasSmsPermission() =
+        ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS) ==
+            PackageManager.PERMISSION_GRANTED
 
     override fun onResume() {
         super.onResume()
@@ -243,6 +283,15 @@ class MainActivity : AppCompatActivity() {
             else "٢) ✅ " + apps.joinToString("، ") { appLabel(it) }
 
         swStrict.isChecked = manager.isStrict()
+
+        // لو الصلاحية انسحبت من الإعدادات نطفي الخيار
+        if (manager.isSmsAuto() && !hasSmsPermission()) manager.setSmsAuto(false)
+        swSms.isChecked = manager.isSmsAuto()
+        findViewById<TextView>(R.id.tvLastAuto).text = when {
+            !manager.isSmsAuto() -> "كل رسالة شراء أو سحب أو حوالة صادرة تنحسب لحالها."
+            manager.getLastAuto() != null -> "✅ " + manager.getLastAuto()
+            else -> "✅ شغال: ينتظر أول رسالة من البنك"
+        }
 
         val hasPin = manager.hasPin()
         findViewById<TextView>(R.id.tvStepPin).text =
