@@ -12,8 +12,12 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      - run: chmod +x gradlew
-      - run: ./gradlew assembleDebug
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: '8.0'
+      - name: Build APK
+        run: gradle assembleDebug
       - uses: actions/upload-artifact@v3
         with:
           name: BudgetLock-APK
