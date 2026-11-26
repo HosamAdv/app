@@ -1,35 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:background="@color/bg"
     android:gravity="center"
-    android:background="#CC000000"
-    android:padding="32dp">
+    android:layoutDirection="rtl"
+    android:orientation="vertical"
+    android:padding="28dp">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:background="@drawable/bg_lock_circle"
+        android:gravity="center"
         android:text="🔒"
-        android:textSize="64sp"
-        android:layout_marginBottom="16dp"/>
+        android:textSize="52sp"
+        android:layout_marginBottom="28dp" />
+
+    <TextView
+        android:id="@+id/tvLockTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="خلصت مصروف اليوم"
+        android:textColor="@color/text_primary"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="10dp" />
 
     <TextView
         android:id="@+id/tvLockMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="وصلت للحد اليومي"
-        android:textSize="22sp"
-        android:textColor="#FFFFFF"
         android:gravity="center"
-        android:layout_marginBottom="32dp"/>
+        android:lineSpacingExtra="4dp"
+        android:textColor="@color/text_secondary"
+        android:textSize="16sp"
+        android:layout_marginBottom="24dp" />
 
-    <Button
-        android:id="@+id/btnClose"
+    <TextView
+        android:id="@+id/tvUnlockAt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="إغلاق"
-        android:backgroundTint="#FF5722"
-        android:paddingHorizontal="32dp"/>
+        android:background="@drawable/bg_stat"
+        android:gravity="center"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:textColor="@color/warn"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="40dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnClose"
+        style="@style/BigButton"
+        android:text="رجوع للرئيسية"
+        app:backgroundTint="@color/surface_high"
+        android:textColor="@color/text_primary" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnEmergency"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="فك القفل برمز الطوارئ"
+        android:textColor="@color/text_secondary" />
 
 </LinearLayout>

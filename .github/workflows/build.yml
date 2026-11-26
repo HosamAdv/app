@@ -2,7 +2,7 @@ name: Build APK
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, 'claude/**' ]
   workflow_dispatch:
 
 jobs:
@@ -35,6 +35,7 @@ jobs:
           path: app/build/outputs/apk/debug/app-debug.apk
 
       - name: Create GitHub Release
+        if: github.ref == 'refs/heads/main'
         run: |
           TAG="v$(date +'%Y%m%d-%H%M%S')"
           gh release create "$TAG" \
