@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <uses-permission android:name="android.permission.BIND_ACCESSIBILITY_SERVICE"/>
+    <!-- عشان نعرض قائمة التطبيقات المثبتة ونختار منها تطبيقات البنوك (Android 11+) -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.MAIN"/>
+            <category android:name="android.intent.category.LAUNCHER"/>
+        </intent>
+    </queries>
     <application
         android:allowBackup="true"
+        android:supportsRtl="true"
         android:label="BudgetLock"
-        android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
+        android:theme="@style/Theme.BudgetLock">
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -16,7 +23,10 @@
         <activity
             android:name=".LockActivity"
             android:exported="false"
-            android:showOnLockScreen="true"/>
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:taskAffinity="com.hosam.budgetlock.lock"
+            android:theme="@style/Theme.BudgetLock.Lock"/>
         <service
             android:name=".LockAccessibilityService"
             android:exported="true"
