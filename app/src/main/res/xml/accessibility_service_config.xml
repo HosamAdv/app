@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- بدون packageNames: الخدمة تسمع كل التطبيقات، والكود يقفل بس التطبيقات اللي اخترتها -->
 <accessibility-service
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:description="@string/accessibility_description"
     android:accessibilityEventTypes="typeWindowStateChanged"
     android:accessibilityFeedbackType="feedbackGeneric"
     android:accessibilityFlags="flagDefault"
     android:canRetrieveWindowContent="false"
-    android:packageNames="com.riyad.bank.brq,com.riyadbank.mobile"
+    android:notificationTimeout="100"
     android:settingsActivity="com.hosam.budgetlock.MainActivity"/>
